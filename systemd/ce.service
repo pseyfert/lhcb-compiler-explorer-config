@@ -1,0 +1,12 @@
+[Unit]
+Description=Compiler Explorer
+After=autofs.service network-online.target network.target cernvm.service
+Wants=autofs.service network-online.target cernvm.service
+
+[Service]
+WorkingDirectory=/home/pseyfert/compiler-explorer
+ExecStart=/usr/bin/make
+User=pseyfert
+
+[Install]
+WantedBy=default.target

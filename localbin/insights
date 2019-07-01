@@ -1,0 +1,41 @@
+#!/bin/bash
+
+# juggeling arguments.
+# -S causes failure
+# -o <out> get's filtered and treated specially
+# input filename gets put last by compiler explorer
+
+declare -a args
+args=()
+
+prev=""
+for x; do
+  if [[ $prev = "-o" ]]; then
+    fname=$x
+  else
+    if [[ $x != "-o" || $x != "-S" ]]; then
+      args+=($x)
+    fi
+  fi
+  prev=$x
+done
+
+# https://stackoverflow.com/a/8247497
+unset 'args[${#args[@]}-1]'
+
+# if no cppinsights-trusty is running, start one
+docker ps -f status=running --format='{{.ID}}\t{{.Image}}' | grep -P '\tcppinsights-trusty\b' > /dev/null
+if [[ $? != 0 ]]; then
+  docker run -it -d -v /cvmfs:/cvmfs -v /tmp:/tmp cppinsights-trusty /bin/bash
+fi
+containers=$(docker ps --format='{{.ID}}\t{{.Image}}' -f status=running | grep -P '\tcppinsights-trusty\b' | sed "s/\t.*//")
+
+# docker exec -i b03b424f494a /usr/bin/insights $x -- -isystem/usr/lib/gcc/x86_64-linux-gnu/7/include -isystem/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed ${args[@]} > $fname
+# docker exec -i b03b424f494a /usr/bin/insights $x -- ${args[@]} > $fname
+
+# if there is no -o, then just print to stdout (e.g. version checking at compiler-explorer startup)
+if [[ $fname == "" ]]; then
+  docker exec -i ${containers:0:12} /usr/bin/insights $x -- ${args[@]}
+else
+  docker exec -i ${containers:0:12} /usr/bin/insights $x -- ${args[@]} > $fname
+fi

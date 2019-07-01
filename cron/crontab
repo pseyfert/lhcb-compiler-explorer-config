@@ -1,0 +1,16 @@
+MAILTO="pseyfert@cern.ch"
+GOPATH="/home/pseyfert/go"
+CEPATH="/home/pseyfert/compiler-explorer"
+# one could shorten to `go run github.com/pseyfert/compilecommands_to_compilerexplorer/lb-CE-collect-nightlies` BUT SLC7 has go version 1.9.4 …
+  0    *     *   *    * go run $GOPATH/src/github.com/pseyfert/compilecommands_to_compilerexplorer/lb-CE-collect-nightlies/main.go -o $CEPATH/etc/config/c++.local.properties -cmtconfig x86_64+avx2+fma-centos7-gcc8-opt
+  5    *     *   *    * go run $GOPATH/src/github.com/pseyfert/parse-cmake-for-ce4lhcb/cli/tryaround.go -o $CEPATH/etc/config/c++.pseyfert-ce.properties -cmtconfig x86_64+avx2+fma-centos7-gcc8-opt -project Brunel
+ 30    *     *   *    * (cd /home/pseyfert/compiler-explorer ; git add . ; git commit -m "automatic commit" )
+# *    *     *   *    *        command to be executed
+# -    -     -   -    -
+# |    |     |   |    |
+# |    |     |   |    +----- day of week (0 - 6) (Sunday=0)
+# |    |     |   +------- month (1 - 12)
+# |    |     +--------- day of month (1 - 31)
+# |    +----------- hour (0 - 23)
+# +---------- min (0 - 59)
+

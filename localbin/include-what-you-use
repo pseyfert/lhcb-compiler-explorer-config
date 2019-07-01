@@ -1,0 +1,6 @@
+#!/bin/sh
+export PATH=/cvmfs/lhcb.cern.ch/lib/lcg/releases/llvm/6.0.0/x86_64-centos7-gcc7-opt/bin:/cvmfs/lhcb.cern.ch/lib/lcg/releases/gcc/7.3.0/x86_64-centos7/bin:/cvmfs/lhcb.cern.ch/lib/lcg/releases/binutils/2.28/x86_64-centos7/bin${PATH:+:$PATH}
+LD_LIBRARY_PATH=$(printenv LD_LIBRARY_PATH | sed 's-[^:]*/\(gcc\|llvm\)/[^:]*:\?--g')
+export LD_LIBRARY_PATH=/cvmfs/lhcb.cern.ch/lib/lcg/releases/llvm/6.0.0/x86_64-centos7-gcc7-opt/lib64:/cvmfs/lhcb.cern.ch/lib/lcg/releases/gcc/7.3.0/x86_64-centos7/lib64:/cvmfs/lhcb.cern.ch/lib/lcg/releases/binutils/2.28/x86_64-centos7/lib${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
+exec /home/pseyfert/.local/bin/include-what-you-use-bin --gcc-toolchain=/cvmfs/lhcb.cern.ch/lib/lcg/releases/gcc/7.3.0/x86_64-centos7 "$@"
+
