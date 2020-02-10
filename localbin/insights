@@ -24,11 +24,11 @@ done
 unset 'args[${#args[@]}-1]'
 
 # if no cppinsights-trusty is running, start one
-docker ps -f status=running --format='{{.ID}}\t{{.Image}}' | grep -P '\tcppinsights-trusty\b' > /dev/null
+docker ps -f status=running --format='{{.ID}}\t{{.Image}}' | grep -P '\tandreasfertig/cppinsights-container\b' > /dev/null
 if [[ $? != 0 ]]; then
-  docker run -it -d -v /cvmfs:/cvmfs -v /tmp:/tmp cppinsights-trusty /bin/bash
+  docker run -it -d -v /cvmfs:/cvmfs -v /tmp:/tmp --entrypoint=/bin/bash andreasfertig/cppinsights-container
 fi
-containers=$(docker ps --format='{{.ID}}\t{{.Image}}' -f status=running | grep -P '\tcppinsights-trusty\b' | sed "s/\t.*//")
+containers=$(docker ps --format='{{.ID}}\t{{.Image}}' -f status=running | grep -P '\tandreasfertig/cppinsights-container\b' | sed "s/\t.*//")
 
 # docker exec -i b03b424f494a /usr/bin/insights $x -- -isystem/usr/lib/gcc/x86_64-linux-gnu/7/include -isystem/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed ${args[@]} > $fname
 # docker exec -i b03b424f494a /usr/bin/insights $x -- ${args[@]} > $fname
